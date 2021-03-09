@@ -7,7 +7,7 @@ public class CameraController : MonoBehaviour
     private Rigidbody2D rigidBody;
     public float baseSpeed = 0.1f;
     public float currentSpeedV = 0.0f;
-    enum direction { NONE, UP, DOWN, RIGHT, LEFT };
+    enum direction { NONE, UP, DOWN, RIGHT, LEFT, UPLEFT, UPRIGHT, DOWNLEFT, DOWNRIGHT };
     direction actualDirection = direction.RIGHT;
     // Start is called before the first frame update
     void Start()
@@ -43,6 +43,15 @@ public class CameraController : MonoBehaviour
                 baseSpeed = 0.2f;
                 rigidBody.velocity = new Vector2(-baseSpeed, 0) * delta;
                 break;
+            case direction.DOWNLEFT:
+                baseSpeed = 0.05f;
+                rigidBody.velocity = new Vector2(-baseSpeed, -baseSpeed) * delta;
+                break;
+            case direction.DOWNRIGHT:
+                baseSpeed = 0.05f;
+                rigidBody.velocity = new Vector2(baseSpeed, -baseSpeed) * delta;
+                break;
+
             default:
                 baseSpeed = 0.2f;
                 rigidBody.velocity = new Vector2(baseSpeed, 0) * delta;
@@ -70,6 +79,22 @@ public class CameraController : MonoBehaviour
             else if (zRotationCollision == 270 || zRotationCollision == 90)
             {
                 actualDirection = direction.RIGHT;
+            }
+            else if (zRotationCollision == 45 || zRotationCollision == -315)
+            {
+                actualDirection = direction.UPLEFT;
+            }
+            else if (zRotationCollision == 315 || zRotationCollision == -45)
+            {
+                actualDirection = direction.UPRIGHT;
+            }
+            else if (zRotationCollision == 135 || zRotationCollision == -225)
+            {
+                actualDirection = direction.DOWNLEFT;
+            }
+            else if (zRotationCollision == -135 || zRotationCollision == 225)
+            {
+                actualDirection = direction.DOWNRIGHT;
             }
         }
     }

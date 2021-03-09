@@ -5,6 +5,9 @@ using UnityEngine;
 public class playerController : MonoBehaviour
 {
     public enum Direction { NONE, UP, DOWN, LEFT, RIGHT };
+    public enum Player { NONE, PLAYER1, PLAYER2, PLAYER3, PLAYER4 }
+    public Player playerNum;
+
     private Direction direction = Direction.NONE;
 
     public bool isAlive = true;
@@ -23,29 +26,49 @@ public class playerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        KeyCode upButton = KeyCode.W;
+        KeyCode downButton = KeyCode.S;
+        KeyCode leftButton = KeyCode.A;
+        KeyCode rightButton = KeyCode.D;
         if (!isAlive) { Destroy(gameObject); }
-
-        KeyCode wButton = KeyCode.W;
-        KeyCode sButton = KeyCode.S;
-        KeyCode aButton = KeyCode.A;
-        KeyCode dButton = KeyCode.D;
-
-        direction = Direction.NONE;
-        if (wButton != KeyCode.None && sButton != KeyCode.None)
+        switch (playerNum)
         {
-            if (Input.GetKey(wButton))
+            default:
+                upButton = KeyCode.W;
+                downButton = KeyCode.S;
+                leftButton = KeyCode.A;
+                rightButton = KeyCode.D;
+                break;
+            case Player.PLAYER1:
+                upButton = KeyCode.W;
+                downButton = KeyCode.S;
+                leftButton = KeyCode.A;
+                rightButton = KeyCode.D;
+                break;
+            case Player.PLAYER2:
+                upButton = KeyCode.I;
+                downButton = KeyCode.K;
+                leftButton = KeyCode.J;
+                rightButton = KeyCode.L;
+                break;
+        }
+        
+        direction = Direction.NONE;
+        if (upButton != KeyCode.None && downButton != KeyCode.None)
+        {
+            if (Input.GetKey(upButton))
             {
                 direction = Direction.UP;
             }
-            else if (Input.GetKey(sButton))
+            else if (Input.GetKey(downButton))
             {
                 direction = Direction.DOWN;
             }
-            else if (Input.GetKey(aButton))
+            else if (Input.GetKey(leftButton))
             {
                 direction = Direction.LEFT;
             }
-            else if (Input.GetKey(dButton))
+            else if (Input.GetKey(rightButton))
             {
                 direction = Direction.RIGHT;
             }
