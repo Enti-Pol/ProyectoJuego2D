@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     private Rigidbody2D rigidBody;
-    public float baseSpeed = 0.3f;
+    public float baseSpeed = 0.1f;
     public float currentSpeedV = 0.0f;
     enum direction { NONE, UP, DOWN, RIGHT, LEFT };
     direction actualDirection = direction.RIGHT;
@@ -28,18 +28,23 @@ public class CameraController : MonoBehaviour
         switch (actualDirection)
         {
             case direction.UP:
+                baseSpeed = 0.05f;
                 rigidBody.velocity = new Vector2(0, baseSpeed) * delta;
                 break;
             case direction.DOWN:
+                baseSpeed = 0.1f;
                 rigidBody.velocity = new Vector2(0, -baseSpeed) * delta;
                 break;
             case direction.RIGHT:
+                baseSpeed = 0.2f;
                 rigidBody.velocity = new Vector2(baseSpeed, 0) * delta;
                 break;
             case direction.LEFT:
+                baseSpeed = 0.2f;
                 rigidBody.velocity = new Vector2(-baseSpeed, 0) * delta;
                 break;
             default:
+                baseSpeed = 0.2f;
                 rigidBody.velocity = new Vector2(baseSpeed, 0) * delta;
                 break;
         }
