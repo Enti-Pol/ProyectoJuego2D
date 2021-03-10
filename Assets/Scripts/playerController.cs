@@ -17,6 +17,8 @@ public class playerController : MonoBehaviour
     public float baseSpeed = 1f;
     private float JumpForce = 35f;
 
+    public int hp = 100;
+
     private Rigidbody2D rigidBody;
     // Start is called before the first frame update
     void Start()
@@ -76,6 +78,7 @@ public class playerController : MonoBehaviour
                 direction = Direction.RIGHT;
             }
         }
+        if (hp <= 0) { isAlive = false; }
     }
 
     private void FixedUpdate()
@@ -118,7 +121,7 @@ public class playerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "camBorder")
         {
-            isAlive = false;
+            hp = -100;
         }
     }
 }
