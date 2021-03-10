@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class playerController : MonoBehaviour
 {
@@ -26,11 +27,12 @@ public class playerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKey("escape")) { Application.Quit(); }
         KeyCode upButton = KeyCode.W;
         KeyCode downButton = KeyCode.S;
         KeyCode leftButton = KeyCode.A;
         KeyCode rightButton = KeyCode.D;
-        if (!isAlive) { Destroy(gameObject); }
+        
         switch (playerNum)
         {
             default:
@@ -44,6 +46,7 @@ public class playerController : MonoBehaviour
                 downButton = KeyCode.S;
                 leftButton = KeyCode.A;
                 rightButton = KeyCode.D;
+                if (!isAlive) { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); }
                 break;
             case Player.PLAYER2:
                 upButton = KeyCode.I;
@@ -52,7 +55,7 @@ public class playerController : MonoBehaviour
                 rightButton = KeyCode.L;
                 break;
         }
-        
+        if (!isAlive) { Destroy(gameObject); }
         direction = Direction.NONE;
         if (upButton != KeyCode.None && downButton != KeyCode.None)
         {
@@ -77,6 +80,7 @@ public class playerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        transform.localScale = new Vector3(3, 5, 1);
         float delta = Time.fixedDeltaTime * 1000;
 
         if (direction == Direction.RIGHT)
@@ -86,6 +90,10 @@ public class playerController : MonoBehaviour
         else if (direction == Direction.LEFT)
         {
             rigidBody.AddForce(-(transform.right) * baseSpeed * delta);
+        }
+        else if (direction == Direction.DOWN)
+        {
+            transform.localScale = new Vector3(3, 3, 1);
         }
         if (!isJumping)
         {
