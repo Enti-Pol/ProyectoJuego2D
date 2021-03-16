@@ -163,7 +163,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 1aeee5f532b65ee4c98848faa94d12e4, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5660378, g: 0.5660378, b: 0.5660378, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -211,9 +211,15 @@ MonoBehaviour:
   maxSpeed: 6
   jumpHeight: 10
   gravityScale: 1.5
+  boostSpeed: 0
+  boostLength: 0
+  boostCounter: 0
   isAlive: 1
   hp: 100
   facingRight: 1
+  shieldPwr: 0
+  shieldMaxPwr: 2
+  theShield: {fileID: 0}
 --- !u!70 &993258853489080514
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
