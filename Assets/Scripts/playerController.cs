@@ -3,38 +3,51 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
+
 public class playerController : MonoBehaviour
 {
-    public enum Direction { NONE, UP, DOWN, LEFT, RIGHT };
     public enum Player { NONE, PLAYER1, PLAYER2, PLAYER3, PLAYER4 }
+    public enum Direction { None, RIGHT, LEFT }
+    public Direction isRight;
     public Player playerNum;
 
-    private Direction direction = Direction.NONE;
+    public float maxSpeed = 3.4f;
+    public float jumpHeight = 6.5f;
+    public float gravityScale = 1.5f;
 
     public bool isAlive = true;
-    private bool isJumping = false;
-
-    public float baseSpeed = 1f;
-    private float JumpForce = 35f;
-
     public int hp = 100;
 
-    private Rigidbody2D rigidBody;
-    // Start is called before the first frame update
+    public bool facingRight = true;
+    float moveDirection = 0;
+    bool isGrounded = false;
+    Rigidbody2D r2d;
+    CapsuleCollider2D mainCollider;
+    Transform t;
+
+    // Use this for initialization
     void Start()
     {
-        rigidBody = GetComponent<Rigidbody2D>();
+        t = transform;
+        r2d = GetComponent<Rigidbody2D>();
+        mainCollider = GetComponent<CapsuleCollider2D>();
+        r2d.freezeRotation = true;
+        r2d.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
+        r2d.gravityScale = gravityScale;
+        facingRight = t.localScale.x > 0;
+        isRight = Direction.RIGHT;
     }
 
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKey("escape")) { Application.Quit(); }
+        // Movement controls
         KeyCode upButton = KeyCode.W;
         KeyCode downButton = KeyCode.S;
         KeyCode leftButton = KeyCode.A;
         KeyCode rightButton = KeyCode.D;
-        
         switch (playerNum)
         {
             default:
@@ -58,63 +71,76 @@ public class playerController : MonoBehaviour
                 break;
         }
         if (!isAlive) { Destroy(gameObject); }
-        direction = Direction.NONE;
-        if (upButton != KeyCode.None && downButton != KeyCode.None)
+        if ((Input.GetKey(leftButton) || Input.GetKey(rightButton)) && (isGrounded || Mathf.Abs(r2d.velocity.x) > 0.01f))
         {
-            if (Input.GetKey(upButton))
+            if (Input.GetKey(leftButton)) { isRight = Direction.LEFT; }
+            if (Input.GetKey(rightButton)) { isRight = Direction.RIGHT; }
+            moveDirection = Input.GetKey(leftButton) ? -1 : 1;
+        }
+        else
+        {
+            if (isGrounded || r2d.velocity.magnitude < 0.01f)
             {
-                direction = Direction.UP;
-            }
-            else if (Input.GetKey(downButton))
-            {
-                direction = Direction.DOWN;
-            }
-            else if (Input.GetKey(leftButton))
-            {
-                direction = Direction.LEFT;
-            }
-            else if (Input.GetKey(rightButton))
-            {
-                direction = Direction.RIGHT;
+                moveDirection = 0;
             }
         }
-        if (hp <= 0) { isAlive = false; }
-    }
 
-    private void FixedUpdate()
-    {
-        transform.localScale = new Vector3(3, 5, 1);
-        float delta = Time.fixedDeltaTime * 1000;
-
-        if (direction == Direction.RIGHT)
+        // Change facing direction
+        if (moveDirection != 0)
         {
-            rigidBody.AddForce(transform.right * baseSpeed * delta);
+            if (moveDirection > 0 && !facingRight)
+            {
+                facingRight = true;
+                t.localScale = new Vector3(Mathf.Abs(t.localScale.x), t.localScale.y, transform.localScale.z);
+            }
+            if (moveDirection < 0 && facingRight)
+            {
+                facingRight = false;
+                t.localScale = new Vector3(-Mathf.Abs(t.localScale.x), t.localScale.y, t.localScale.z);
+            }
         }
-        else if (direction == Direction.LEFT)
+        // Jumping
+        if (Input.GetKeyDown(upButton) && isGrounded)
         {
-            rigidBody.AddForce(-(transform.right) * baseSpeed * delta);
+            r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
+            isGrounded = false;
         }
-        else if (direction == Direction.DOWN)
+        if (Input.GetKey(downButton))
         {
             transform.localScale = new Vector3(3, 3, 1);
         }
-        if (!isJumping)
+        if (Input.GetKeyUp(downButton))
         {
-            if (direction == Direction.UP)
-            {
-                rigidBody.AddForce(transform.up * JumpForce * delta);
-                isJumping = true;
-            }
+            transform.localScale = new Vector3(3, 5, 1);
         }
-        
+
+        if (hp <= 0) { isAlive = false; }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    void FixedUpdate()
     {
-        if (collision.gameObject.tag == "ground")
+        Bounds colliderBounds = mainCollider.bounds;
+        float colliderRadius = mainCollider.size.x * 0.4f * Mathf.Abs(transform.localScale.x);
+        Vector3 groundCheckPos = colliderBounds.min + new Vector3(colliderBounds.size.x * 0.5f, colliderRadius * 0.9f, 0);
+        // Check if player is grounded
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheckPos, colliderRadius);
+        //Check if any of the overlapping colliders are not player collider, if so, set isGrounded to true
+        isGrounded = false;
+        if (colliders.Length > 0)
         {
-            isJumping = false;
+            for (int i = 0; i < colliders.Length; i++)
+            {
+                if (colliders[i] != mainCollider)
+                {
+                    isGrounded = true;
+                    break;
+                }
+            }
         }
+
+        // Apply movement velocity
+        r2d.velocity = new Vector2((moveDirection) * maxSpeed, r2d.velocity.y);
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
