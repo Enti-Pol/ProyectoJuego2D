@@ -9,6 +9,7 @@ TagManager:
   - camBorder
   - Player1
   - Player2
+  - PlayerInteractionZone
   layers:
   - Default
   - TransparentFX

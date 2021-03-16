@@ -62,7 +62,6 @@ public class CameraController : MonoBehaviour
     {
         if (collision.gameObject.tag == "direction")
         {
-            Debug.Log("xD");
             float zRotationCollision = collision.gameObject.transform.rotation.eulerAngles.z;
             if (zRotationCollision == 0)
             {
