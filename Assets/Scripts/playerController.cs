@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class playerController : MonoBehaviour
 {
+    public static playerController instance;
     public enum Player { NONE, PLAYER1, PLAYER2, PLAYER3, PLAYER4 }
     public enum Direction { None, RIGHT, LEFT }
     public Direction isRight;
@@ -15,6 +16,11 @@ public class playerController : MonoBehaviour
     public float maxSpeed = 3.4f;
     public float jumpHeight = 6.5f;
     public float gravityScale = 1.5f;
+
+    private float normalSpeed;
+    public float boostSpeed;
+    public float boostLength;
+    public float boostCounter;
 
     public bool isAlive = true;
     public int hp = 100;
@@ -25,6 +31,15 @@ public class playerController : MonoBehaviour
     Rigidbody2D r2d;
     CapsuleCollider2D mainCollider;
     Transform t;
+
+    public int shieldPwr;
+    public int shieldMaxPwr = 2;
+    public GameObject theShield;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     // Use this for initialization
     void Start()
@@ -37,6 +52,8 @@ public class playerController : MonoBehaviour
         r2d.gravityScale = gravityScale;
         facingRight = t.localScale.x > 0;
         isRight = Direction.RIGHT;
+        ActivateShield();
+        normalSpeed = maxSpeed;
     }
 
     // Update is called once per frame
@@ -115,6 +132,15 @@ public class playerController : MonoBehaviour
         }
 
         if (hp <= 0) { isAlive = false; }
+        
+       if(boostCounter > 0)
+        {
+            boostCounter -= Time.deltaTime;
+            if(boostCounter <= 0)
+            {
+                maxSpeed = normalSpeed;
+            }
+        }
     }
 
     void FixedUpdate()
@@ -149,5 +175,16 @@ public class playerController : MonoBehaviour
         {
             hp = -100;
         }
+    }
+    public void ActivateShield()
+    {
+        theShield.SetActive(true);
+        shieldPwr = shieldMaxPwr;
+    }
+
+    public void ActivateSpeedBoost()
+    {
+        boostCounter = boostLength;
+        maxSpeed = boostSpeed;
     }
 }
