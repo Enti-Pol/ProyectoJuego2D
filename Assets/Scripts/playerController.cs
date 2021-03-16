@@ -52,7 +52,7 @@ public class playerController : MonoBehaviour
         r2d.gravityScale = gravityScale;
         facingRight = t.localScale.x > 0;
         isRight = Direction.RIGHT;
-        ActivateShield();
+        theShield.SetActive(false);
         normalSpeed = maxSpeed;
     }
 
@@ -133,13 +133,19 @@ public class playerController : MonoBehaviour
 
         if (hp <= 0) { isAlive = false; }
         
-       if(boostCounter > 0)
+       if (boostCounter > 0)
         {
+            Debug.Log(boostCounter);
             boostCounter -= Time.deltaTime;
-            if(boostCounter <= 0)
-            {
-                maxSpeed = normalSpeed;
-            }
+        }
+        if (boostCounter <= 0)
+        {
+            maxSpeed = normalSpeed;
+        }
+        if (theShield.activeSelf && hp <= 90)
+        {
+            hp = 100;
+            theShield.SetActive(false);
         }
     }
 
@@ -185,6 +191,6 @@ public class playerController : MonoBehaviour
     public void ActivateSpeedBoost()
     {
         boostCounter = boostLength;
-        maxSpeed = boostSpeed;
+        maxSpeed = 8;
     }
 }
