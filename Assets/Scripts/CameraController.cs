@@ -32,7 +32,7 @@ public class CameraController : MonoBehaviour
                 rigidBody.velocity = new Vector2(0, baseSpeed) * delta;
                 break;
             case direction.DOWN:
-                baseSpeed = 0.1f;
+                baseSpeed = 0.05f;
                 rigidBody.velocity = new Vector2(0, -baseSpeed) * delta;
                 break;
             case direction.RIGHT:
@@ -44,12 +44,20 @@ public class CameraController : MonoBehaviour
                 rigidBody.velocity = new Vector2(-baseSpeed, 0) * delta;
                 break;
             case direction.DOWNLEFT:
-                baseSpeed = 0.05f;
+                baseSpeed = 0.1f;
                 rigidBody.velocity = new Vector2(-baseSpeed, -baseSpeed) * delta;
                 break;
             case direction.DOWNRIGHT:
-                baseSpeed = 0.05f;
+                baseSpeed = 0.1f;
                 rigidBody.velocity = new Vector2(baseSpeed, -baseSpeed) * delta;
+                break;
+            case direction.UPRIGHT:
+                baseSpeed = 0.1f;
+                rigidBody.velocity = new Vector2(baseSpeed, baseSpeed) * delta;
+                break;
+            case direction.UPLEFT:
+                baseSpeed = 0.1f;
+                rigidBody.velocity = new Vector2(-baseSpeed, baseSpeed) * delta;
                 break;
 
             default:

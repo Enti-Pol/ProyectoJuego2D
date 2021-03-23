@@ -20,7 +20,7 @@ public class chocolateController : MonoBehaviour
         float delta = Time.deltaTime * 1000;
         if (playerDetect)
         {
-            rigidBody.velocity = new Vector2(0, 0.3f) * delta;
+            rigidBody.velocity = new Vector2(0, 0.1f) * delta;
         }
         else
         {

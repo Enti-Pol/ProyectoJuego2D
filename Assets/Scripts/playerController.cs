@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class playerController : MonoBehaviour
 {
     public static playerController instance;
-    public enum Player { NONE, PLAYER1, PLAYER2, PLAYER3, PLAYER4 }
+    public enum Player { NONE, PLAYER1, PLAYER2, PLAYER3, PLAYER4, IA }
     public enum Direction { None, RIGHT, LEFT }
     public Direction isRight;
     public Player playerNum;
@@ -86,6 +86,12 @@ public class playerController : MonoBehaviour
                 leftButton = KeyCode.J;
                 rightButton = KeyCode.L;
                 break;
+            case Player.IA:
+                upButton = KeyCode.None;
+                downButton = KeyCode.None;
+                leftButton = KeyCode.None;
+                rightButton = KeyCode.None;
+                break;
         }
         if (!isAlive) { Destroy(gameObject); }
         if ((Input.GetKey(leftButton) || Input.GetKey(rightButton)) && (isGrounded || Mathf.Abs(r2d.velocity.x) > 0.01f))
@@ -135,7 +141,6 @@ public class playerController : MonoBehaviour
         
        if (boostCounter > 0)
         {
-            Debug.Log(boostCounter);
             boostCounter -= Time.deltaTime;
         }
         if (boostCounter <= 0)
@@ -171,8 +176,16 @@ public class playerController : MonoBehaviour
         }
 
         // Apply movement velocity
+        if (playerNum == Player.IA && isRight == Direction.RIGHT)
+        {
+            moveDirection = 1;
+        }
+        else if (playerNum == Player.IA && isRight == Direction.LEFT)
+        {
+            moveDirection = -1;
+        }
         r2d.velocity = new Vector2((moveDirection) * maxSpeed, r2d.velocity.y);
-
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -180,6 +193,29 @@ public class playerController : MonoBehaviour
         if (collision.gameObject.tag == "camBorder")
         {
             hp = -100;
+        }
+        else if (collision.gameObject.tag == "jump" && playerNum == Player.IA)
+        {
+            r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
+        }
+        else if (collision.gameObject.tag == "left" && playerNum == Player.IA)
+        {
+            isRight = Direction.LEFT;
+        }
+        else if (collision.gameObject.tag == "right" && playerNum == Player.IA)
+        {
+            isRight = Direction.RIGHT;
+        }
+        else if (collision.gameObject.tag == "meta")
+        {
+            if (playerNum == Player.PLAYER1)
+            {
+                SceneManager.LoadScene("WinP1");
+            }
+            else if (playerNum == Player.IA)
+            {
+                SceneManager.LoadScene("WinP2");
+            }
         }
     }
     public void ActivateShield()
