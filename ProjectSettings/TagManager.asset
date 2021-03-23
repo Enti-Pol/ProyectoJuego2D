@@ -11,6 +11,10 @@ TagManager:
   - Player2
   - PlayerInteractionZone
   - bullet
+  - jump
+  - left
+  - right
+  - meta
   layers:
   - Default
   - TransparentFX
