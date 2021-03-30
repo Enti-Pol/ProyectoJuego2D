@@ -16,7 +16,6 @@ public class chocolateController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(playerDetect);
         float delta = Time.deltaTime * 1000;
         if (playerDetect)
         {
