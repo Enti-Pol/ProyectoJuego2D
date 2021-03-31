@@ -10,6 +10,10 @@ public class MainMenu : MonoBehaviour
     {
         sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel("MiniCircuito");
     }
+    public void PlayTutorial()
+    {
+        sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel("TestMap");
+    }
     public void QuitGame()
     {
         Application.Quit();
