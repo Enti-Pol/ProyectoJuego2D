@@ -35,6 +35,7 @@ public class playerController : MonoBehaviour
     public int shieldPwr;
     public int shieldMaxPwr = 2;
     public GameObject theShield;
+    private AudioClip jumpSound;
 
     private void Awake()
     {
@@ -54,6 +55,7 @@ public class playerController : MonoBehaviour
         isRight = Direction.RIGHT;
         theShield.SetActive(false);
         normalSpeed = maxSpeed;
+        jumpSound = GetComponent<AudioSource>().clip;
     }
 
     // Update is called once per frame
@@ -125,16 +127,23 @@ public class playerController : MonoBehaviour
         // Jumping
         if (Input.GetKeyDown(upButton) && isGrounded)
         {
+            AudioSource.PlayClipAtPoint(jumpSound, transform.position, 10f);
             r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
             isGrounded = false;
         }
         if (Input.GetKey(downButton))
         {
-            transform.localScale = new Vector3(3, 3, 1);
+            //transform.localScale = new Vector3(3, 3, 1);
+            mainCollider.size = new Vector2(mainCollider.size.x, mainCollider.size.y * 0.5f);
+            mainCollider.offset = new Vector2(mainCollider.offset.x, -0.06f);
         }
         if (Input.GetKeyUp(downButton))
         {
-            transform.localScale = new Vector3(3, 5, 1);
+            if (CanStand())
+            {
+                mainCollider.size = new Vector2(mainCollider.size.x, 0.32f);
+                mainCollider.offset = new Vector2(mainCollider.offset.x, 0f);
+            }
         }
 
         if (hp <= 0) { isAlive = false; }
@@ -196,6 +205,7 @@ public class playerController : MonoBehaviour
         }
         else if (collision.gameObject.tag == "jump" && playerNum == Player.IA)
         {
+            AudioSource.PlayClipAtPoint(jumpSound, transform.position, 10f);
             r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
         }
         else if (collision.gameObject.tag == "left" && playerNum == Player.IA)
@@ -228,5 +238,18 @@ public class playerController : MonoBehaviour
     {
         boostCounter = boostLength;
         maxSpeed = 8;
+    }
+    private bool CanStand()
+    {
+        RaycastHit2D hit = Physics2D.Raycast(t.position, Vector2.up);
+        if (hit.collider != null)
+        {
+            // Check the distance to make sure the character has clearance, you'll have to change the 1.0f to what makes sense in your situation.
+            if (hit.distance <= 3.0f)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

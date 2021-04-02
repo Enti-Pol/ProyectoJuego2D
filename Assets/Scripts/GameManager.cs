@@ -22,9 +22,13 @@ public class GameManager : MonoBehaviour
             Debug.Log("Warning: multiple " + this + " in scene!");
         }
     }
-    public void getVolume(float vol)
+    public void setMusic(float vol)
     {
-        audioMixer.SetFloat("volume", vol);
+        audioMixer.SetFloat("music", vol);
+    }
+    public void setSFX(float vol)
+    {
+        audioMixer.SetFloat("sfx", vol);
     }
     // Start is called before the first frame update
     void Start()

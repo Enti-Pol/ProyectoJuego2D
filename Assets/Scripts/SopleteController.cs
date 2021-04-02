@@ -20,13 +20,13 @@ public class SopleteController : MonoBehaviour
     {
         float delta = Time.deltaTime * 1000;
         timeToActivate += delta;
-        if (timeToActivate >= 6000 && activate)
+        if (timeToActivate >= 3000 && activate)
         {
             transform.localScale = size;
             activate = false;
             timeToActivate = 0;
         }
-        else if (timeToActivate >= 3000 && !activate)
+        else if (timeToActivate >= 2000 && !activate)
         {
             transform.localScale = new Vector3(0, 0, 0);
             activate = true;
