@@ -12348,12 +12348,12 @@ PrefabInstance:
     - target: {fileID: 7919750210805658177, guid: 8d50217fec3049348988b268df515bd5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 95
+      value: 108.05
       objectReference: {fileID: 0}
     - target: {fileID: 7919750210805658177, guid: 8d50217fec3049348988b268df515bd5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: -0.92
       objectReference: {fileID: 0}
     - target: {fileID: 7919750210805658177, guid: 8d50217fec3049348988b268df515bd5,
         type: 3}
@@ -14272,7 +14272,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Press E to pick other players
+  m_Text: 'Press E to push other players
 
 '
 --- !u!222 &2144077336

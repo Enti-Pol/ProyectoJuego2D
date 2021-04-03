@@ -35,6 +35,7 @@ public class SopleteController : MonoBehaviour
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
+        if (collision.tag == "Player1" || collision.tag == "Player2")
         collision.GetComponent<playerController>().hp = collision.GetComponent<playerController>().hp - damage;
     }
 }

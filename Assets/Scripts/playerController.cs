@@ -26,7 +26,7 @@ public class playerController : MonoBehaviour
     public int hp = 100;
 
     public bool facingRight = true;
-    float moveDirection = 0;
+    public float moveDirection = 0;
     bool isGrounded = false;
     Rigidbody2D r2d;
     CapsuleCollider2D mainCollider;
