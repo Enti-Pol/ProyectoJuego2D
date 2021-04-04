@@ -10,9 +10,7 @@ public class levelLoaderScript : MonoBehaviour
     private string sceneToLoad;
     public void LoadNextLevel(string loadScene)
     {
-        Debug.Log("xD");
         transition.SetTrigger("Start");
-        Debug.Log("Ha llegado :D");
         sceneToLoad = loadScene;
         Invoke("loadTheScene", 1);
     }

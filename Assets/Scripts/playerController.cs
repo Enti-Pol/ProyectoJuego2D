@@ -13,6 +13,7 @@ public class playerController : MonoBehaviour
     public Direction isRight;
     public Player playerNum;
 
+    private Animator animator;
     public float maxSpeed = 3.4f;
     public float jumpHeight = 6.5f;
     public float gravityScale = 1.5f;
@@ -56,11 +57,16 @@ public class playerController : MonoBehaviour
         theShield.SetActive(false);
         normalSpeed = maxSpeed;
         jumpSound = GetComponent<AudioSource>().clip;
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (playerNum == Player.PLAYER1 || playerNum == Player.PLAYER2)
+        {
+            animator.SetBool("Running", false);
+        }
         if (Input.GetKey("escape")) { Application.Quit(); }
         // Movement controls
         KeyCode upButton = KeyCode.W;
@@ -101,6 +107,7 @@ public class playerController : MonoBehaviour
             if (Input.GetKey(leftButton)) { isRight = Direction.LEFT; }
             if (Input.GetKey(rightButton)) { isRight = Direction.RIGHT; }
             moveDirection = Input.GetKey(leftButton) ? -1 : 1;
+            animator.SetBool("Running", true);
         }
         else
         {
@@ -130,19 +137,23 @@ public class playerController : MonoBehaviour
             AudioSource.PlayClipAtPoint(jumpSound, transform.position, 10f);
             r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
             isGrounded = false;
+            animator.SetBool("Jumping", true);
         }
         if (Input.GetKey(downButton))
         {
             //transform.localScale = new Vector3(3, 3, 1);
-            mainCollider.size = new Vector2(mainCollider.size.x, mainCollider.size.y * 0.5f);
+            mainCollider.size = new Vector2(mainCollider.size.x, mainCollider.size.y * 0.8f);
             mainCollider.offset = new Vector2(mainCollider.offset.x, -0.06f);
+            animator.SetBool("Mini", true);
         }
         if (Input.GetKeyUp(downButton))
         {
+            animator.SetBool("Mini", true);
             if (CanStand())
             {
-                mainCollider.size = new Vector2(mainCollider.size.x, 0.32f);
-                mainCollider.offset = new Vector2(mainCollider.offset.x, 0f);
+                mainCollider.size = new Vector2(mainCollider.size.x, 2.145193f);
+                mainCollider.offset = new Vector2(mainCollider.offset.x, -0.06f);
+                animator.SetBool("Mini", false);
             }
         }
 
@@ -179,6 +190,7 @@ public class playerController : MonoBehaviour
                 if (colliders[i] != mainCollider)
                 {
                     isGrounded = true;
+                    animator.SetBool("Jumping", false);
                     break;
                 }
             }
@@ -207,13 +219,16 @@ public class playerController : MonoBehaviour
         {
             AudioSource.PlayClipAtPoint(jumpSound, transform.position, 10f);
             r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
+            animator.SetBool("Jumping", true);
         }
         else if (collision.gameObject.tag == "left" && playerNum == Player.IA)
         {
             isRight = Direction.LEFT;
+            animator.SetBool("Running", true);
         }
         else if (collision.gameObject.tag == "right" && playerNum == Player.IA)
         {
+            animator.SetBool("Running", true);
             isRight = Direction.RIGHT;
         }
         else if (collision.gameObject.tag == "meta")
