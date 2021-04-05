@@ -65,7 +65,7 @@ public class playerController : MonoBehaviour
         {
             playerNum = Player.PLAYER2;
         }
-        else if (tag == "Player2")
+        else if (tag == "Player2" && gameManager.GetComponent<GameManager>().playerOrIA == 1)
         {
             playerNum = Player.IA;
         }
