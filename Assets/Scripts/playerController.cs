@@ -37,6 +37,8 @@ public class playerController : MonoBehaviour
     public int shieldMaxPwr = 2;
     public GameObject theShield;
     private AudioClip jumpSound;
+    private bool godMode = false;
+    private GameObject gameManager;
 
     private void Awake()
     {
@@ -58,119 +60,213 @@ public class playerController : MonoBehaviour
         normalSpeed = maxSpeed;
         jumpSound = GetComponent<AudioSource>().clip;
         animator = GetComponent<Animator>();
+        gameManager = GameObject.Find("gameManager");
+        if (tag == "Player2" && gameManager.GetComponent<GameManager>().playerOrIA == 2)
+        {
+            playerNum = Player.PLAYER2;
+        }
+        else if (tag == "Player2")
+        {
+            playerNum = Player.IA;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (playerNum == Player.PLAYER1 || playerNum == Player.PLAYER2)
+        if (Input.GetKeyDown(KeyCode.G))
         {
-            animator.SetBool("Running", false);
+            godMode = !godMode;
         }
-        if (Input.GetKey("escape")) { Application.Quit(); }
-        // Movement controls
-        KeyCode upButton = KeyCode.W;
-        KeyCode downButton = KeyCode.S;
-        KeyCode leftButton = KeyCode.A;
-        KeyCode rightButton = KeyCode.D;
-        switch (playerNum)
+        if (!godMode)
         {
-            default:
-                upButton = KeyCode.W;
-                downButton = KeyCode.S;
-                leftButton = KeyCode.A;
-                rightButton = KeyCode.D;
-                break;
-            case Player.PLAYER1:
-                upButton = KeyCode.W;
-                downButton = KeyCode.S;
-                leftButton = KeyCode.A;
-                rightButton = KeyCode.D;
-                if (!isAlive) { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); }
-                break;
-            case Player.PLAYER2:
-                upButton = KeyCode.I;
-                downButton = KeyCode.K;
-                leftButton = KeyCode.J;
-                rightButton = KeyCode.L;
-                break;
-            case Player.IA:
-                upButton = KeyCode.None;
-                downButton = KeyCode.None;
-                leftButton = KeyCode.None;
-                rightButton = KeyCode.None;
-                break;
-        }
-        if (!isAlive) { Destroy(gameObject); }
-        if ((Input.GetKey(leftButton) || Input.GetKey(rightButton)) && (isGrounded || Mathf.Abs(r2d.velocity.x) > 0.01f))
-        {
-            if (Input.GetKey(leftButton)) { isRight = Direction.LEFT; }
-            if (Input.GetKey(rightButton)) { isRight = Direction.RIGHT; }
-            moveDirection = Input.GetKey(leftButton) ? -1 : 1;
-            animator.SetBool("Running", true);
+            r2d.gravityScale = 1.5f;
+            if (playerNum == Player.PLAYER1 || playerNum == Player.PLAYER2)
+            {
+                animator.SetBool("Running", false);
+            }
+            if (playerNum == Player.PLAYER2 || playerNum == Player.IA)
+            {
+                animator.SetBool("Player2", true);
+            }
+            // Movement controls
+            KeyCode upButton = KeyCode.W;
+            KeyCode downButton = KeyCode.S;
+            KeyCode leftButton = KeyCode.A;
+            KeyCode rightButton = KeyCode.D;
+            switch (playerNum)
+            {
+                default:
+                    upButton = KeyCode.W;
+                    downButton = KeyCode.S;
+                    leftButton = KeyCode.A;
+                    rightButton = KeyCode.D;
+                    break;
+                case Player.PLAYER1:
+                    upButton = KeyCode.W;
+                    downButton = KeyCode.S;
+                    leftButton = KeyCode.A;
+                    rightButton = KeyCode.D;
+                    if (!isAlive) { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); }
+                    break;
+                case Player.PLAYER2:
+                    upButton = KeyCode.I;
+                    downButton = KeyCode.K;
+                    leftButton = KeyCode.J;
+                    rightButton = KeyCode.L;
+                    break;
+                case Player.IA:
+                    upButton = KeyCode.None;
+                    downButton = KeyCode.None;
+                    leftButton = KeyCode.None;
+                    rightButton = KeyCode.None;
+                    break;
+            }
+            if (!isAlive) { Destroy(gameObject); }
+            if ((Input.GetKey(leftButton) || Input.GetKey(rightButton)) && (isGrounded || Mathf.Abs(r2d.velocity.x) > 0.01f))
+            {
+                if (Input.GetKey(leftButton)) { isRight = Direction.LEFT; }
+                if (Input.GetKey(rightButton)) { isRight = Direction.RIGHT; }
+                moveDirection = Input.GetKey(leftButton) ? -1 : 1;
+                animator.SetBool("Running", true);
+            }
+            else
+            {
+                if (isGrounded || r2d.velocity.magnitude < 0.01f)
+                {
+                    moveDirection = 0;
+                }
+            }
+
+            // Change facing direction
+            if (moveDirection != 0)
+            {
+                if (moveDirection > 0 && !facingRight)
+                {
+                    facingRight = true;
+                    t.localScale = new Vector3(Mathf.Abs(t.localScale.x), t.localScale.y, transform.localScale.z);
+                }
+                if (moveDirection < 0 && facingRight)
+                {
+                    facingRight = false;
+                    t.localScale = new Vector3(-Mathf.Abs(t.localScale.x), t.localScale.y, t.localScale.z);
+                }
+            }
+            // Jumping
+            if ((Input.GetKeyDown(upButton) || Input.GetKeyDown(KeyCode.Space)) && isGrounded)
+            {
+                AudioSource.PlayClipAtPoint(jumpSound, transform.position, 10f);
+                r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
+                isGrounded = false;
+                animator.SetBool("Jumping", true);
+            }
+            if (Input.GetKey(downButton))
+            {
+                //transform.localScale = new Vector3(3, 3, 1);
+                mainCollider.size = new Vector2(mainCollider.size.x, mainCollider.size.y * 0.8f);
+                mainCollider.offset = new Vector2(mainCollider.offset.x, -0.06f);
+                animator.SetBool("Mini", true);
+            }
+            if (Input.GetKeyUp(downButton))
+            {
+                animator.SetBool("Mini", true);
+                if (CanStand())
+                {
+                    mainCollider.size = new Vector2(mainCollider.size.x, 2.145193f);
+                    mainCollider.offset = new Vector2(mainCollider.offset.x, -0.06f);
+                    animator.SetBool("Mini", false);
+                }
+            }
+
+            if (hp <= 0) { isAlive = false; }
+
+            if (boostCounter > 0)
+            {
+                boostCounter -= Time.deltaTime;
+            }
+            if (boostCounter <= 0)
+            {
+                maxSpeed = normalSpeed;
+            }
+            if (theShield.activeSelf && hp <= 90)
+            {
+                hp = 100;
+                theShield.SetActive(false);
+            }
         }
         else
         {
-            if (isGrounded || r2d.velocity.magnitude < 0.01f)
+            r2d.gravityScale = 0;
+            KeyCode upButton = KeyCode.W;
+            KeyCode downButton = KeyCode.S;
+            KeyCode leftButton = KeyCode.A;
+            KeyCode rightButton = KeyCode.D;
+            switch (playerNum)
+            {
+                default:
+                    upButton = KeyCode.W;
+                    downButton = KeyCode.S;
+                    leftButton = KeyCode.A;
+                    rightButton = KeyCode.D;
+                    break;
+                case Player.PLAYER1:
+                    upButton = KeyCode.W;
+                    downButton = KeyCode.S;
+                    leftButton = KeyCode.A;
+                    rightButton = KeyCode.D;
+                    if (!isAlive) { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); }
+                    break;
+                case Player.PLAYER2:
+                    upButton = KeyCode.I;
+                    downButton = KeyCode.K;
+                    leftButton = KeyCode.J;
+                    rightButton = KeyCode.L;
+                    break;
+                case Player.IA:
+                    upButton = KeyCode.None;
+                    downButton = KeyCode.None;
+                    leftButton = KeyCode.None;
+                    rightButton = KeyCode.None;
+                    break;
+            }
+            if (Input.GetKey(leftButton) || Input.GetKey(rightButton))
+            {
+                if (Input.GetKey(leftButton)) { isRight = Direction.LEFT; }
+                if (Input.GetKey(rightButton)) { isRight = Direction.RIGHT; }
+                moveDirection = Input.GetKey(leftButton) ? -1 : 1;
+            }
+            else
             {
                 moveDirection = 0;
             }
-        }
-
-        // Change facing direction
-        if (moveDirection != 0)
-        {
-            if (moveDirection > 0 && !facingRight)
+            if (Input.GetKeyDown(upButton) && isGrounded)
             {
-                facingRight = true;
-                t.localScale = new Vector3(Mathf.Abs(t.localScale.x), t.localScale.y, transform.localScale.z);
+                AudioSource.PlayClipAtPoint(jumpSound, transform.position, 10f);
+                r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
+                isGrounded = false;
+                animator.SetBool("Jumping", true);
             }
-            if (moveDirection < 0 && facingRight)
+            if (Input.GetKey(downButton))
             {
-                facingRight = false;
-                t.localScale = new Vector3(-Mathf.Abs(t.localScale.x), t.localScale.y, t.localScale.z);
-            }
-        }
-        // Jumping
-        if (Input.GetKeyDown(upButton) && isGrounded)
-        {
-            AudioSource.PlayClipAtPoint(jumpSound, transform.position, 10f);
-            r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
-            isGrounded = false;
-            animator.SetBool("Jumping", true);
-        }
-        if (Input.GetKey(downButton))
-        {
-            //transform.localScale = new Vector3(3, 3, 1);
-            mainCollider.size = new Vector2(mainCollider.size.x, mainCollider.size.y * 0.8f);
-            mainCollider.offset = new Vector2(mainCollider.offset.x, -0.06f);
-            animator.SetBool("Mini", true);
-        }
-        if (Input.GetKeyUp(downButton))
-        {
-            animator.SetBool("Mini", true);
-            if (CanStand())
-            {
-                mainCollider.size = new Vector2(mainCollider.size.x, 2.145193f);
+                //transform.localScale = new Vector3(3, 3, 1);
+                mainCollider.size = new Vector2(mainCollider.size.x, mainCollider.size.y * 0.8f);
                 mainCollider.offset = new Vector2(mainCollider.offset.x, -0.06f);
-                animator.SetBool("Mini", false);
+                animator.SetBool("Mini", true);
             }
-        }
-
-        if (hp <= 0) { isAlive = false; }
-        
-       if (boostCounter > 0)
-        {
-            boostCounter -= Time.deltaTime;
-        }
-        if (boostCounter <= 0)
-        {
-            maxSpeed = normalSpeed;
-        }
-        if (theShield.activeSelf && hp <= 90)
-        {
-            hp = 100;
-            theShield.SetActive(false);
+            if (Input.GetKeyUp(downButton))
+            {
+                animator.SetBool("Mini", true);
+                if (CanStand())
+                {
+                    mainCollider.size = new Vector2(mainCollider.size.x, 2.145193f);
+                    mainCollider.offset = new Vector2(mainCollider.offset.x, -0.06f);
+                    animator.SetBool("Mini", false);
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
         }
     }
 

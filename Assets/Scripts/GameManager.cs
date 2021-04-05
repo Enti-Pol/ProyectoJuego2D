@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public float volume = 1;
     public Slider soundSlider;
     public AudioMixer audioMixer;
+    public int playerOrIA = 0;
     public static GameManager Instance { get; private set; }
     private void Awake()
     {

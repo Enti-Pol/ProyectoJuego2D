@@ -16,10 +16,14 @@ public class chocolateController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+    }
+    private void FixedUpdate()
+    {
         float delta = Time.deltaTime * 1000;
         if (playerDetect)
         {
-            rigidBody.velocity = new Vector2(0, 0.1f) * delta;
+            rigidBody.velocity = new Vector2(0, 0.01f) * delta;
         }
         else
         {
