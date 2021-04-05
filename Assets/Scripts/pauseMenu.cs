@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class pauseMenu : MonoBehaviour
 {
@@ -36,6 +37,12 @@ public class pauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel("StartMenu");
+    }
+    public void Restart()
+    {
+        pauseMenuUI.SetActive(false);
+        Time.timeScale = 1f;
+        sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel(SceneManager.GetActiveScene().name);
     }
     void Pause()
     {

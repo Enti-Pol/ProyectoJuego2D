@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7731572571464707117}
   - component: {fileID: 7731572571464707119}
   - component: {fileID: 7731572571464707116}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ChocolateDetector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,7 +45,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.1624197}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -56,7 +56,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.32, y: 0.32}
+  m_Size: {x: 0.32, y: 0.64483917}
   m_EdgeRadius: 0
 --- !u!114 &7731572571464707116
 MonoBehaviour:
@@ -83,7 +83,7 @@ GameObject:
   - component: {fileID: 7731572572442031343}
   - component: {fileID: 7731572572442031340}
   - component: {fileID: 7731572572442031342}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Chocolate derretido
   m_TagString: camBorder
   m_Icon: {fileID: 0}

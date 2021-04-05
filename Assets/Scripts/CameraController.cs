@@ -28,7 +28,7 @@ public class CameraController : MonoBehaviour
         switch (actualDirection)
         {
             case direction.UP:
-                baseSpeed = 0.05f;
+                baseSpeed = 0.13f;
                 rigidBody.velocity = new Vector2(0, baseSpeed) * delta;
                 break;
             case direction.DOWN:

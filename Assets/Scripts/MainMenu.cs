@@ -14,8 +14,25 @@ public class MainMenu : MonoBehaviour
     public void PlayGame(int value)
     {
         gameManager.gameObject.GetComponent<GameManager>().playerOrIA = value;
-        Debug.Log(gameManager.gameObject.GetComponent<GameManager>().playerOrIA);
-        sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel("MiniCircuito");
+        sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel(ReturnARandomLevel());
+    }
+    private string ReturnARandomLevel()
+    {
+        int randNum = Random.Range(0, 3);
+        string nextLevel = "";
+        switch (randNum)
+        {
+            case 0:
+                nextLevel = "MiniCircuito";
+                break;
+            case 1:
+                nextLevel = "MiniCircuito2";
+                break;
+            case 2:
+                nextLevel = "MiniCircuito3";
+                break;
+        }
+        return nextLevel;
     }
     public void PlayTutorial()
     {

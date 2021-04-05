@@ -8,11 +8,13 @@ public class SopleteController : MonoBehaviour
     private float timeToActivate;
     private bool activate = false;
     private Vector3 size;
+    private AudioClip shootSound;
     // Start is called before the first frame update
     void Start()
     {
         timeToActivate = 0;
         size = gameObject.transform.localScale;
+        shootSound = GetComponent<AudioSource>().clip;
     }
 
     // Update is called once per frame
@@ -22,6 +24,7 @@ public class SopleteController : MonoBehaviour
         timeToActivate += delta;
         if (timeToActivate >= 3000 && activate)
         {
+            AudioSource.PlayClipAtPoint(shootSound, transform.position, 10f);
             transform.localScale = size;
             activate = false;
             timeToActivate = 0;

@@ -20,7 +20,7 @@ public class PowerUp : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Player1")
+        if (other.gameObject.tag == "Player1" || other.gameObject.tag == "Player2")
         {
             Destroy(gameObject);
 
@@ -31,7 +31,7 @@ public class PowerUp : MonoBehaviour
 
             if (isBoost)
             {
-                other.gameObject.GetComponent<playerController>().boostLength = 10;
+                other.gameObject.GetComponent<playerController>().boostLength = 2;
                 other.gameObject.GetComponent<playerController>().ActivateSpeedBoost();
             }
         }

@@ -20,4 +20,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WinP2.unity
     guid: 096795e0eda1ccc419a0233cdd27ad88
+  - enabled: 1
+    path: Assets/Scenes/MiniCircuito2.unity
+    guid: 2b8efe243ef278b468b0a73ec9bc2306
+  - enabled: 1
+    path: Assets/Scenes/MiniCircuito3.unity
+    guid: c8795edde51266b449e8036fd45c6038
   m_configObjects: {}

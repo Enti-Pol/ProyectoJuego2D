@@ -356,7 +356,7 @@ public class playerController : MonoBehaviour
         if (hit.collider != null)
         {
             // Check the distance to make sure the character has clearance, you'll have to change the 1.0f to what makes sense in your situation.
-            if (hit.distance <= 3.0f)
+            if (hit.distance <= 1.0f)
             {
                 return false;
             }
