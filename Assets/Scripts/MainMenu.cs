@@ -13,7 +13,8 @@ public class MainMenu : MonoBehaviour
     }
     public void PlayGame(int value)
     {
-        gameManager.gameObject.GetComponent<GameManager>().playerOrIA = value;
+        gameManager = GameObject.Find("gameManager");
+        gameManager.GetComponent<GameManager>().playerOrIA = value;
         sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel(ReturnARandomLevel());
     }
     private string ReturnARandomLevel()
