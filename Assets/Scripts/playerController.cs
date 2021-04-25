@@ -122,7 +122,7 @@ public class playerController : MonoBehaviour
                     rightButton = KeyCode.None;
                     break;
             }
-            if (!isAlive) { Destroy(gameObject); }
+            if (!isAlive) { gameObject.SetActive(false); }
             if ((Input.GetKey(leftButton) || Input.GetKey(rightButton)) && (isGrounded || Mathf.Abs(r2d.velocity.x) > 0.01f))
             {
                 if (Input.GetKey(leftButton)) { isRight = Direction.LEFT; }
