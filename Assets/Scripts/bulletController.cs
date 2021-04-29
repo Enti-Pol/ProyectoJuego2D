@@ -28,10 +28,5 @@ public class bulletController : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        else if (collision.gameObject.tag == "Player1" || collision.gameObject.tag == "Player2")
-        {
-            collision.gameObject.GetComponent<playerController>().hp = collision.gameObject.GetComponent<playerController>().hp - damage;
-            Destroy(gameObject);
-        }
     }
 }

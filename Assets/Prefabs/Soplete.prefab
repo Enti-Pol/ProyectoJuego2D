@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 806626344779604116}
   - component: {fileID: 806626344779604123}
-  - component: {fileID: 806626344779604122}
   - component: {fileID: 806626344779604117}
   - component: {fileID: 2238753318470636938}
+  - component: {fileID: 3675664658208893405}
   m_Layer: 0
   m_Name: Llama exterior
-  m_TagString: Untagged
+  m_TagString: killer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,19 +84,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &806626344779604122
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 806626344779604119}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 010bddbab1f0ebc4088623136cbeb700, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 1
 --- !u!61 &806626344779604117
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -110,7 +97,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0015533827, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -121,7 +108,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.32, y: 0.32}
+  m_Size: {x: 0.1583991, y: 0.32}
   m_EdgeRadius: 0
 --- !u!82 &2238753318470636938
 AudioSource:
@@ -144,7 +131,7 @@ AudioSource:
   SpatializePostEffects: 0
   Priority: 128
   DopplerLevel: 1
-  MinDistance: 1
+  MinDistance: 0.95145416
   MaxDistance: 500
   Pan2D: 0
   rolloffMode: 0
@@ -220,6 +207,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3675664658208893405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806626344779604119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 010bddbab1f0ebc4088623136cbeb700, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
 --- !u!1 &806626345039618085
 GameObject:
   m_ObjectHideFlags: 0
@@ -355,12 +355,12 @@ GameObject:
   m_Component:
   - component: {fileID: 806626346694249084}
   - component: {fileID: 806626346694249058}
-  - component: {fileID: 806626346694249085}
   - component: {fileID: 806626346694249059}
   - component: {fileID: 4695945877532055831}
+  - component: {fileID: 2212630425139408099}
   m_Layer: 0
   m_Name: Llama centro
-  m_TagString: Untagged
+  m_TagString: killer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -429,19 +429,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &806626346694249085
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 806626346694249087}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 010bddbab1f0ebc4088623136cbeb700, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 2
 --- !u!61 &806626346694249059
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -455,7 +442,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.0008301586, y: -0.045736015}
+  m_Offset: {x: -0.0031605773, y: -0.10943497}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -466,7 +453,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.15536106, y: 0.5462388}
+  m_Size: {x: 0.08854505, y: 0.4188409}
   m_EdgeRadius: 0
 --- !u!82 &4695945877532055831
 AudioSource:
@@ -565,6 +552,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2212630425139408099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806626346694249087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 010bddbab1f0ebc4088623136cbeb700, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 1
 --- !u!1001 &7765238055401379012
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -12,6 +12,7 @@ public class playerController : MonoBehaviour
     public enum Direction { None, RIGHT, LEFT }
     public Direction isRight;
     public Player playerNum;
+    public GameObject SkeletalAnimation;
 
     private Animator animator;
     public float maxSpeed = 3.4f;
@@ -22,6 +23,7 @@ public class playerController : MonoBehaviour
     public float boostSpeed;
     public float boostLength;
     public float boostCounter;
+    public int failNum = 10;
 
     public bool isAlive = true;
     public int hp = 100;
@@ -39,6 +41,7 @@ public class playerController : MonoBehaviour
     private AudioClip jumpSound;
     private bool godMode = false;
     private GameObject gameManager;
+    private Vector3 checkPoint;
 
     private void Awake()
     {
@@ -69,6 +72,7 @@ public class playerController : MonoBehaviour
         {
             playerNum = Player.IA;
         }
+        checkPoint = transform.position;
     }
 
     // Update is called once per frame
@@ -83,7 +87,7 @@ public class playerController : MonoBehaviour
             r2d.gravityScale = 1.5f;
             if (playerNum == Player.PLAYER1 || playerNum == Player.PLAYER2)
             {
-                animator.SetBool("Running", false);
+                SkeletalAnimation.GetComponent<Animator>().SetBool("Running", false);
             }
             if (playerNum == Player.PLAYER2 || playerNum == Player.IA)
             {
@@ -128,7 +132,7 @@ public class playerController : MonoBehaviour
                 if (Input.GetKey(leftButton)) { isRight = Direction.LEFT; }
                 if (Input.GetKey(rightButton)) { isRight = Direction.RIGHT; }
                 moveDirection = Input.GetKey(leftButton) ? -1 : 1;
-                animator.SetBool("Running", true);
+                SkeletalAnimation.GetComponent<Animator>().SetBool("Running", true);
             }
             else
             {
@@ -153,12 +157,13 @@ public class playerController : MonoBehaviour
                 }
             }
             // Jumping
-            if ((Input.GetKeyDown(upButton) || Input.GetKeyDown(KeyCode.Space)) && isGrounded)
+            if (Input.GetKeyDown(upButton) && isGrounded)
             {
                 AudioSource.PlayClipAtPoint(jumpSound, transform.position, 10f);
                 r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
                 isGrounded = false;
-                animator.SetBool("Jumping", true);
+                SkeletalAnimation.GetComponent<Animator>().SetBool("Landing", false);
+                SkeletalAnimation.GetComponent<Animator>().SetBool("Jumping", true);
             }
             if (Input.GetKey(downButton))
             {
@@ -245,6 +250,8 @@ public class playerController : MonoBehaviour
                 r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
                 isGrounded = false;
                 animator.SetBool("Jumping", true);
+                SkeletalAnimation.GetComponent<Animator>().SetBool("Landing", false);
+                SkeletalAnimation.GetComponent<Animator>().SetBool("Jumping", true);
             }
             if (Input.GetKey(downButton))
             {
@@ -287,6 +294,8 @@ public class playerController : MonoBehaviour
                 {
                     isGrounded = true;
                     animator.SetBool("Jumping", false);
+                    SkeletalAnimation.GetComponent<Animator>().SetBool("Jumping", false);
+                    SkeletalAnimation.GetComponent<Animator>().SetBool("Landing", true);
                     break;
                 }
             }
@@ -307,24 +316,38 @@ public class playerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "camBorder")
+        if (collision.gameObject.tag == "killer")
         {
-            hp = -100;
+            goToLastCheckPoint();
+        }
+        else if (collision.gameObject.tag == "checkpoint")
+        {
+            checkPoint = transform.position;
         }
         else if (collision.gameObject.tag == "jump" && playerNum == Player.IA)
         {
+            int JumpOrNot = (int)Random.Range(0, failNum);
+            if (JumpOrNot > 5)
+            {
+                AudioSource.PlayClipAtPoint(jumpSound, transform.position, 10f);
+                r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
+                SkeletalAnimation.GetComponent<Animator>().SetBool("Jumping", true);
+            }
+        }
+        else if (collision.gameObject.tag == "fJump" && playerNum == Player.IA)
+        {
             AudioSource.PlayClipAtPoint(jumpSound, transform.position, 10f);
             r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
-            animator.SetBool("Jumping", true);
+            SkeletalAnimation.GetComponent<Animator>().SetBool("Jumping", true);
         }
         else if (collision.gameObject.tag == "left" && playerNum == Player.IA)
         {
             isRight = Direction.LEFT;
-            animator.SetBool("Running", true);
+            SkeletalAnimation.GetComponent<Animator>().SetBool("Running", true);
         }
         else if (collision.gameObject.tag == "right" && playerNum == Player.IA)
         {
-            animator.SetBool("Running", true);
+            SkeletalAnimation.GetComponent<Animator>().SetBool("Running", true);
             isRight = Direction.RIGHT;
         }
         else if (collision.gameObject.tag == "meta")
@@ -349,6 +372,10 @@ public class playerController : MonoBehaviour
     {
         boostCounter = boostLength;
         maxSpeed = 8;
+    }
+    public void goToLastCheckPoint()
+    {
+        transform.position = checkPoint;
     }
     private bool CanStand()
     {

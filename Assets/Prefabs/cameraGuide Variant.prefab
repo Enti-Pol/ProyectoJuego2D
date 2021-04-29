@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4314057542739463733}
   m_Layer: 8
   m_Name: CameraBorder
-  m_TagString: camBorder
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 1265751172814103026}
   m_Layer: 8
   m_Name: CameraBorder (3)
-  m_TagString: camBorder
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -333,7 +333,7 @@ GameObject:
   - component: {fileID: 1833212941218074825}
   m_Layer: 8
   m_Name: CameraBorder (1)
-  m_TagString: camBorder
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -441,7 +441,7 @@ GameObject:
   - component: {fileID: 3690831719737249848}
   m_Layer: 8
   m_Name: CameraBorder (2)
-  m_TagString: camBorder
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
