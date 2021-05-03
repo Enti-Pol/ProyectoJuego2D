@@ -18,6 +18,8 @@ TagManager:
   - killer
   - fJump
   - checkpoint
+  - Player3
+  - Player4
   layers:
   - Default
   - TransparentFX

@@ -12,7 +12,7 @@ public class returnToMenu : MonoBehaviour
     }
     private void callIt()
     {
-        sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel("StartMenu");
+        sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel(0);
     }
 
     // Update is called once per frame

@@ -11,11 +11,12 @@ public class MainMenu : MonoBehaviour
     private void Start()
     {
     }
-    public void PlayGame(int value)
+    public void PlayGame()
     {
         gameManager = GameObject.Find("gameManager");
-        gameManager.GetComponent<GameManager>().playerOrIA = value;
-        sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel(ReturnARandomLevel());
+        int actualLevel = gameManager.GetComponent<GameManager>().actualLevel;
+        sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel(actualLevel);
+        gameManager.GetComponent<GameManager>().actualLevel += 1;
     }
     private string ReturnARandomLevel()
     {
@@ -37,7 +38,7 @@ public class MainMenu : MonoBehaviour
     }
     public void PlayTutorial()
     {
-        sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel("TestMap");
+        sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel(1);
     }
     public void QuitGame()
     {

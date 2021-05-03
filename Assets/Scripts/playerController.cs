@@ -12,7 +12,8 @@ public class playerController : MonoBehaviour
     public enum Direction { None, RIGHT, LEFT }
     public Direction isRight;
     public Player playerNum;
-    public GameObject SkeletalAnimation;
+    public GameObject Sktlbody;
+    Animator SkeletalAnimation;
 
     private Animator animator;
     public float maxSpeed = 3.4f;
@@ -51,6 +52,7 @@ public class playerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        SkeletalAnimation = Sktlbody.GetComponent<Animator>();
         t = transform;
         r2d = GetComponent<Rigidbody2D>();
         mainCollider = GetComponent<CapsuleCollider2D>();
@@ -64,14 +66,6 @@ public class playerController : MonoBehaviour
         jumpSound = GetComponent<AudioSource>().clip;
         animator = GetComponent<Animator>();
         gameManager = GameObject.Find("gameManager");
-        if (tag == "Player2" && gameManager.GetComponent<GameManager>().playerOrIA == 2)
-        {
-            playerNum = Player.PLAYER2;
-        }
-        else if (tag == "Player2" && gameManager.GetComponent<GameManager>().playerOrIA == 1)
-        {
-            playerNum = Player.IA;
-        }
         checkPoint = transform.position;
     }
 
@@ -85,13 +79,10 @@ public class playerController : MonoBehaviour
         if (!godMode)
         {
             r2d.gravityScale = 1.5f;
-            if (playerNum == Player.PLAYER1 || playerNum == Player.PLAYER2)
+            if (playerNum == Player.PLAYER1)
             {
-                SkeletalAnimation.GetComponent<Animator>().SetBool("Running", false);
-            }
-            if (playerNum == Player.PLAYER2 || playerNum == Player.IA)
-            {
-                animator.SetBool("Player2", true);
+                SkeletalAnimation.SetBool("Running", false);
+                animator.SetBool("Running", false);
             }
             // Movement controls
             KeyCode upButton = KeyCode.W;
@@ -101,23 +92,16 @@ public class playerController : MonoBehaviour
             switch (playerNum)
             {
                 default:
-                    upButton = KeyCode.W;
-                    downButton = KeyCode.S;
-                    leftButton = KeyCode.A;
-                    rightButton = KeyCode.D;
+                    upButton = KeyCode.None;
+                    downButton = KeyCode.None;
+                    leftButton = KeyCode.None;
+                    rightButton = KeyCode.None;
                     break;
                 case Player.PLAYER1:
-                    upButton = KeyCode.W;
+                    upButton = KeyCode.Space;
                     downButton = KeyCode.S;
                     leftButton = KeyCode.A;
                     rightButton = KeyCode.D;
-                    if (!isAlive) { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); }
-                    break;
-                case Player.PLAYER2:
-                    upButton = KeyCode.I;
-                    downButton = KeyCode.K;
-                    leftButton = KeyCode.J;
-                    rightButton = KeyCode.L;
                     break;
                 case Player.IA:
                     upButton = KeyCode.None;
@@ -126,13 +110,13 @@ public class playerController : MonoBehaviour
                     rightButton = KeyCode.None;
                     break;
             }
-            if (!isAlive) { gameObject.SetActive(false); }
             if ((Input.GetKey(leftButton) || Input.GetKey(rightButton)) && (isGrounded || Mathf.Abs(r2d.velocity.x) > 0.01f))
             {
                 if (Input.GetKey(leftButton)) { isRight = Direction.LEFT; }
                 if (Input.GetKey(rightButton)) { isRight = Direction.RIGHT; }
                 moveDirection = Input.GetKey(leftButton) ? -1 : 1;
-                SkeletalAnimation.GetComponent<Animator>().SetBool("Running", true);
+                SkeletalAnimation.SetBool("Running", true);
+                animator.SetBool("Running", true);
             }
             else
             {
@@ -162,14 +146,17 @@ public class playerController : MonoBehaviour
                 AudioSource.PlayClipAtPoint(jumpSound, transform.position, 10f);
                 r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
                 isGrounded = false;
-                SkeletalAnimation.GetComponent<Animator>().SetBool("Landing", false);
-                SkeletalAnimation.GetComponent<Animator>().SetBool("Jumping", true);
+                SkeletalAnimation.SetBool("Landing", false);
+                SkeletalAnimation.SetBool("Jumping", true);
             }
             if (Input.GetKey(downButton))
             {
                 //transform.localScale = new Vector3(3, 3, 1);
                 mainCollider.size = new Vector2(mainCollider.size.x, mainCollider.size.y * 0.8f);
                 mainCollider.offset = new Vector2(mainCollider.offset.x, -0.06f);
+                SkeletalAnimation.SetBool("Mini", true);
+                Sktlbody.SetActive(false);
+                GetComponent<SpriteRenderer>().enabled = true;
                 animator.SetBool("Mini", true);
             }
             if (Input.GetKeyUp(downButton))
@@ -177,13 +164,13 @@ public class playerController : MonoBehaviour
                 animator.SetBool("Mini", true);
                 if (CanStand())
                 {
+                    Sktlbody.SetActive(true);
+                    GetComponent<SpriteRenderer>().enabled = false;
                     mainCollider.size = new Vector2(mainCollider.size.x, 2.145193f);
                     mainCollider.offset = new Vector2(mainCollider.offset.x, -0.06f);
-                    animator.SetBool("Mini", false);
+                    SkeletalAnimation.SetBool("Mini", false);
                 }
             }
-
-            if (hp <= 0) { isAlive = false; }
 
             if (boostCounter > 0)
             {
@@ -209,10 +196,10 @@ public class playerController : MonoBehaviour
             switch (playerNum)
             {
                 default:
-                    upButton = KeyCode.W;
-                    downButton = KeyCode.S;
-                    leftButton = KeyCode.A;
-                    rightButton = KeyCode.D;
+                    upButton = KeyCode.None;
+                    downButton = KeyCode.None;
+                    leftButton = KeyCode.None;
+                    rightButton = KeyCode.None;
                     break;
                 case Player.PLAYER1:
                     upButton = KeyCode.W;
@@ -220,12 +207,6 @@ public class playerController : MonoBehaviour
                     leftButton = KeyCode.A;
                     rightButton = KeyCode.D;
                     if (!isAlive) { SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); }
-                    break;
-                case Player.PLAYER2:
-                    upButton = KeyCode.I;
-                    downButton = KeyCode.K;
-                    leftButton = KeyCode.J;
-                    rightButton = KeyCode.L;
                     break;
                 case Player.IA:
                     upButton = KeyCode.None;
@@ -250,8 +231,8 @@ public class playerController : MonoBehaviour
                 r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
                 isGrounded = false;
                 animator.SetBool("Jumping", true);
-                SkeletalAnimation.GetComponent<Animator>().SetBool("Landing", false);
-                SkeletalAnimation.GetComponent<Animator>().SetBool("Jumping", true);
+                SkeletalAnimation.SetBool("Landing", false);
+                SkeletalAnimation.SetBool("Jumping", true);
             }
             if (Input.GetKey(downButton))
             {
@@ -293,20 +274,19 @@ public class playerController : MonoBehaviour
                 if (colliders[i] != mainCollider)
                 {
                     isGrounded = true;
-                    animator.SetBool("Jumping", false);
-                    SkeletalAnimation.GetComponent<Animator>().SetBool("Jumping", false);
-                    SkeletalAnimation.GetComponent<Animator>().SetBool("Landing", true);
+                    SkeletalAnimation.SetBool("Jumping", false);
+                    SkeletalAnimation.SetBool("Landing", true);
                     break;
                 }
             }
         }
 
         // Apply movement velocity
-        if (playerNum == Player.IA && isRight == Direction.RIGHT)
+        if ((playerNum == Player.IA || playerNum == Player.PLAYER2 || playerNum == Player.PLAYER3 || playerNum == Player.PLAYER4) && isRight == Direction.RIGHT)
         {
             moveDirection = 1;
         }
-        else if (playerNum == Player.IA && isRight == Direction.LEFT)
+        else if ((playerNum == Player.IA || playerNum == Player.PLAYER2 || playerNum == Player.PLAYER3 || playerNum == Player.PLAYER4) && isRight == Direction.LEFT)
         {
             moveDirection = -1;
         }
@@ -324,30 +304,32 @@ public class playerController : MonoBehaviour
         {
             checkPoint = transform.position;
         }
-        else if (collision.gameObject.tag == "jump" && playerNum == Player.IA)
+        else if (collision.gameObject.tag == "jump" && playerNum != Player.PLAYER1 && isGrounded)
         {
             int JumpOrNot = (int)Random.Range(0, failNum);
             if (JumpOrNot > 5)
             {
                 AudioSource.PlayClipAtPoint(jumpSound, transform.position, 10f);
                 r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
-                SkeletalAnimation.GetComponent<Animator>().SetBool("Jumping", true);
+                SkeletalAnimation.SetBool("Jumping", true);
+                isGrounded = false;
             }
         }
-        else if (collision.gameObject.tag == "fJump" && playerNum == Player.IA)
+        else if (collision.gameObject.tag == "fJump" && playerNum != Player.PLAYER1 && isGrounded)
         {
             AudioSource.PlayClipAtPoint(jumpSound, transform.position, 10f);
             r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
-            SkeletalAnimation.GetComponent<Animator>().SetBool("Jumping", true);
+            SkeletalAnimation.SetBool("Jumping", true);
+            isGrounded = false;
         }
-        else if (collision.gameObject.tag == "left" && playerNum == Player.IA)
+        else if (collision.gameObject.tag == "left" && playerNum != Player.PLAYER1)
         {
             isRight = Direction.LEFT;
-            SkeletalAnimation.GetComponent<Animator>().SetBool("Running", true);
+            SkeletalAnimation.SetBool("Running", true);
         }
-        else if (collision.gameObject.tag == "right" && playerNum == Player.IA)
+        else if (collision.gameObject.tag == "right" && playerNum != Player.PLAYER1)
         {
-            SkeletalAnimation.GetComponent<Animator>().SetBool("Running", true);
+            SkeletalAnimation.SetBool("Running", true);
             isRight = Direction.RIGHT;
         }
         else if (collision.gameObject.tag == "meta")
@@ -356,9 +338,17 @@ public class playerController : MonoBehaviour
             {
                 SceneManager.LoadScene("WinP1");
             }
-            else if (playerNum == Player.IA)
+            else if (playerNum == Player.PLAYER2)
             {
                 SceneManager.LoadScene("WinP2");
+            }
+            else if (playerNum == Player.PLAYER3)
+            {
+                SceneManager.LoadScene("WinP3");
+            }
+            else if (playerNum == Player.PLAYER4)
+            {
+                SceneManager.LoadScene("WinP4");
             }
         }
     }

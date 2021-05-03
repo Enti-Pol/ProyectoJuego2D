@@ -12,14 +12,20 @@ EditorBuildSettings:
     path: Assets/Scenes/TestMap.unity
     guid: a063546fa3e57f64d95b1f21885e64f2
   - enabled: 1
-    path: Assets/Scenes/MiniCircuito.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
     path: Assets/Scenes/WinP1.unity
     guid: 7aaf87fe72aa094439fb86f45dbde564
   - enabled: 1
     path: Assets/Scenes/WinP2.unity
     guid: 096795e0eda1ccc419a0233cdd27ad88
+  - enabled: 1
+    path: Assets/Scenes/WinP3.unity
+    guid: c11910e4da236fd468cba626efb701ae
+  - enabled: 1
+    path: Assets/Scenes/WinP4.unity
+    guid: e0358188521e3cc4191c93a7d02f4d8c
+  - enabled: 1
+    path: Assets/Scenes/MiniCircuito.unity
+    guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
     path: Assets/Scenes/MiniCircuito2.unity
     guid: 2b8efe243ef278b468b0a73ec9bc2306

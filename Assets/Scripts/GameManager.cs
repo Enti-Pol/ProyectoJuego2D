@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public Slider soundSlider;
     public AudioMixer audioMixer;
     public int playerOrIA = 0;
+    public int actualLevel = 6;
     public static GameManager Instance { get; private set; }
     private void Awake()
     {

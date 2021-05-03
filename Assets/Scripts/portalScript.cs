@@ -20,7 +20,7 @@ public class portalScript : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player1")
         {
-            sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel("StartMenu");
+            sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel(0);
         }
     }
 }

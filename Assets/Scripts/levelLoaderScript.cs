@@ -7,8 +7,8 @@ public class levelLoaderScript : MonoBehaviour
 {
     public Animator transition;
     public float transitionTime = 1000f;
-    private string sceneToLoad;
-    public void LoadNextLevel(string loadScene)
+    private int sceneToLoad;
+    public void LoadNextLevel(int loadScene)
     {
         transition.SetTrigger("Start");
         sceneToLoad = loadScene;

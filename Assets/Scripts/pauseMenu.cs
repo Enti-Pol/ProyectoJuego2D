@@ -36,13 +36,13 @@ public class pauseMenu : MonoBehaviour
     {
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
-        sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel("StartMenu");
+        sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel(0);
     }
     public void Restart()
     {
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
-        sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel(SceneManager.GetActiveScene().name);
+        sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel(SceneManager.GetActiveScene().buildIndex);
     }
     void Pause()
     {
