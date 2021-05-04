@@ -15,8 +15,13 @@ public class MainMenu : MonoBehaviour
     {
         gameManager = GameObject.Find("gameManager");
         int actualLevel = gameManager.GetComponent<GameManager>().actualLevel;
-        sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel(actualLevel);
         gameManager.GetComponent<GameManager>().actualLevel += 1;
+        if (actualLevel == 1 || actualLevel == 0)
+        {
+            gameManager.GetComponent<GameManager>().actualLevel = 6;
+            actualLevel = 6;
+        }
+        sceneLoader.GetComponent<levelLoaderScript>().LoadNextLevel(actualLevel);
     }
     private string ReturnARandomLevel()
     {

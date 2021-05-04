@@ -7,28 +7,20 @@ public class PowerUp : MonoBehaviour
     public bool isShield;
     public bool isBoost;
     // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (isShield)
+        if (other.tag == "Player1" || other.tag == "Player2" || other.tag == "Player3" || other.tag == "Player4")
         {
-            other.gameObject.GetComponent<playerController>().ActivateShield();
-        }
+            if (isShield)
+            {
+                other.gameObject.GetComponent<playerController>().ActivateShield();
+            }
 
-        if (isBoost)
-        {
-            other.gameObject.GetComponent<playerController>().boostLength = 2;
-            other.gameObject.GetComponent<playerController>().ActivateSpeedBoost();
+            if (isBoost)
+            {
+                other.gameObject.GetComponent<playerController>().ActivateSpeedBoost();
+            }
         }
     }
 }

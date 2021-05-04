@@ -13,6 +13,7 @@ public class playerController : MonoBehaviour
     public Direction isRight;
     public Player playerNum;
     public GameObject Sktlbody;
+    public GameObject speedBost;
     Animator SkeletalAnimation;
 
     private Animator animator;
@@ -179,6 +180,7 @@ public class playerController : MonoBehaviour
             if (boostCounter <= 0)
             {
                 maxSpeed = normalSpeed;
+                speedBost.SetActive(false);
             }
             if (theShield.activeSelf && hp <= 90)
             {
@@ -360,8 +362,10 @@ public class playerController : MonoBehaviour
 
     public void ActivateSpeedBoost()
     {
+        boostLength = 2;
         boostCounter = boostLength;
         maxSpeed = 8;
+        speedBost.SetActive(true);
     }
     public void goToLastCheckPoint()
     {

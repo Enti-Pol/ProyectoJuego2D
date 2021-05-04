@@ -6,15 +6,12 @@ public class bulletController : MonoBehaviour
 {
     private Rigidbody2D rigidBody;
     public float baseSpeed = 10f;
-    public GameObject ship;
-    public int damage = 5;
 
     // Start is called before the first frame update
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
         rigidBody.velocity = -transform.right * baseSpeed;
-        ship = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
@@ -26,7 +23,12 @@ public class bulletController : MonoBehaviour
     {
         if (collision.gameObject.tag == "ground")
         {
-            Destroy(gameObject);
+            Invoke("destroyThis", 0.2f);
         }
+    }
+
+    private void destroyThis()
+    {
+        Destroy(gameObject);
     }
 }

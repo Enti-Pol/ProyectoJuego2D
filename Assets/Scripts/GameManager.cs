@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public Slider soundSlider;
     public AudioMixer audioMixer;
     public int playerOrIA = 0;
-    public int actualLevel = 6;
+    public int actualLevel = 5;
     public static GameManager Instance { get; private set; }
     private void Awake()
     {
@@ -27,10 +27,18 @@ public class GameManager : MonoBehaviour
     public void setMusic(float vol)
     {
         audioMixer.SetFloat("music", vol);
+        if (vol == 0)
+        {
+            audioMixer.SetFloat("music", -80f);
+        }
     }
     public void setSFX(float vol)
     {
         audioMixer.SetFloat("sfx", vol);
+        if (vol == 0)
+        {
+            audioMixer.SetFloat("sfx", -80f);
+        }
     }
     // Start is called before the first frame update
     void Start()
