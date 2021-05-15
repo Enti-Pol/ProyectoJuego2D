@@ -305,6 +305,7 @@ public class playerController : MonoBehaviour
         else if (collision.gameObject.tag == "checkpoint")
         {
             checkPoint = transform.position;
+            collision.gameObject.GetComponentInChildren<ParticleSystem>().Play();
         }
         else if (collision.gameObject.tag == "jump" && playerNum != Player.PLAYER1 && isGrounded)
         {
