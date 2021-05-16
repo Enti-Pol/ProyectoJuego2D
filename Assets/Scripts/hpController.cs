@@ -16,11 +16,5 @@ public class hpController : MonoBehaviour
 
         
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        healthBar.value = playerHealth.hp;
-    }
     
 }

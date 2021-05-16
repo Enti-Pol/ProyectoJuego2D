@@ -28,7 +28,7 @@ public class playerController : MonoBehaviour
     public int failNum = 10;
 
     public bool isAlive = true;
-    public int hp = 100;
+
 
     public bool facingRight = true;
     public float moveDirection = 0;
@@ -45,6 +45,10 @@ public class playerController : MonoBehaviour
     private GameObject gameManager;
     private Vector3 checkPoint;
 
+    private float lastX = 0.0f;
+    private bool stuck;
+    private float stuckLength = 0.0f;
+
     private void Awake()
     {
         instance = this;
@@ -57,6 +61,7 @@ public class playerController : MonoBehaviour
         t = transform;
         r2d = GetComponent<Rigidbody2D>();
         mainCollider = GetComponent<CapsuleCollider2D>();
+        stuck = false;
         r2d.freezeRotation = true;
         r2d.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         r2d.gravityScale = gravityScale;
@@ -182,11 +187,6 @@ public class playerController : MonoBehaviour
                 maxSpeed = normalSpeed;
                 speedBost.SetActive(false);
             }
-            if (theShield.activeSelf && hp <= 90)
-            {
-                hp = 100;
-                theShield.SetActive(false);
-            }
         }
         else
         {
@@ -257,6 +257,27 @@ public class playerController : MonoBehaviour
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
+        }
+        if (playerNum != Player.PLAYER1)
+        {
+            if (transform.position.x == lastX)
+            {
+                stuck = true;
+            }
+            else
+            {
+                stuck = false;
+                stuckLength = 1.0f;
+            }
+            if (stuck)
+            {
+                stuckLength -= Time.deltaTime;
+                if (stuckLength <= 0)
+                {
+                    goToLastCheckPoint();
+                }
+            }
+            lastX = transform.position.x;
         }
     }
 
@@ -353,6 +374,16 @@ public class playerController : MonoBehaviour
             {
                 SceneManager.LoadScene("WinP4");
             }
+        }
+    }
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "fJump" && playerNum != Player.PLAYER1 && isGrounded)
+        {
+            AudioSource.PlayClipAtPoint(jumpSound, transform.position, 10f);
+            r2d.velocity = new Vector2(r2d.velocity.x, jumpHeight);
+            SkeletalAnimation.SetBool("Jumping", true);
+            isGrounded = false;
         }
     }
     public void ActivateShield()

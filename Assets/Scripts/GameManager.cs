@@ -26,19 +26,11 @@ public class GameManager : MonoBehaviour
     }
     public void setMusic(float vol)
     {
-        audioMixer.SetFloat("music", vol);
-        if (vol == 0)
-        {
-            audioMixer.SetFloat("music", -80f);
-        }
+        audioMixer.SetFloat("music", Mathf.Log10(vol) * 20);
     }
     public void setSFX(float vol)
     {
-        audioMixer.SetFloat("sfx", vol);
-        if (vol == 0)
-        {
-            audioMixer.SetFloat("sfx", -80f);
-        }
+        audioMixer.SetFloat("sfx", Mathf.Log10(vol) * 20);
     }
     // Start is called before the first frame update
     void Start()
